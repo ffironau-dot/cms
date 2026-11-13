@@ -1,0 +1,28 @@
+# =====================================================================
+# Настройки Apache для CMS.
+# 1. Запрет листинга каталогов.
+# 2. Закрытие служебных каталогов от прямого доступа по HTTP.
+# 3. ЧПУ: все запросы, не относящиеся к существующим файлам,
+#    направляются в единую точку входа index.php.
+# Требуется модуль mod_rewrite и AllowOverride All для каталога сайта.
+# =====================================================================
+
+Options -Indexes
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Служебные каталоги: прямой доступ запрещён (403).
+    RewriteRule ^(include|public/classes|public/templates|admin/classes|admin/templates|tests|docs|docker|tools)(/|$) - [F,L]
+
+    # Скрытые файлы (.htaccess, .git и т. п.) — запрещены.
+    RewriteRule (^|/)\. - [F,L]
+
+    # Существующие файлы (стили, скрипты, загруженные картинки, start.php)
+    # отдаются как есть; всё остальное — в index.php.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L,QSA]
+</IfModule>

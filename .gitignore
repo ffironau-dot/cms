@@ -1,0 +1,9 @@
+# Конфигурация конкретной установки (создаётся установщиком start.php)
+/include/connect.php
+/include/installed.lock
+/robots.txt
+# Загруженные файлы
+/uploads/*/*
+!/uploads/*/.gitkeep
+# Служебное
+/tests/_tmp/
